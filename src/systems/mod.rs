@@ -7,6 +7,7 @@ mod movement;
 mod hud;
 mod tooltips;
 mod combat;
+mod chasing;
 
 use crate::prelude::*;
 
@@ -40,6 +41,7 @@ pub fn build_monster_scheduler() -> Schedule {
 		.add_system(combat::combat_system())
 		.flush()
 		.add_system(random_move::random_move_system())
+		.add_system(chasing::chasing_system())
 		.flush()
 		.add_system(movement::movement_system())
 		.flush()
