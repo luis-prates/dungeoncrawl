@@ -1,6 +1,5 @@
 pub use crate::prelude::*;
 use std::collections::HashSet;
-use std::ops::BitAnd;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Render {
