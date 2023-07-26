@@ -11,7 +11,7 @@ pub fn map_render(
 	let mut fov = <&FieldOfView>::query().filter(component::<Player>());
 	let mut draw_batch = DrawBatch::new();
 	draw_batch.target(0);
-	let player_fov = fov.iter(ecs).nth(0).unwrap();
+	let player_fov = fov.iter(ecs).next().unwrap();
 	for y in camera.top_y ..= camera.bottom_y {
 		for x in camera.left_x .. camera.right_x {
 			let pt = Point::new(x, y);

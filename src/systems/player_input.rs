@@ -1,4 +1,4 @@
-use crate::{prelude::*};
+use crate::prelude::*;
 
 #[system]
 #[read_component(Point)]

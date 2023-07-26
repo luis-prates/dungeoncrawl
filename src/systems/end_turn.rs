@@ -12,7 +12,7 @@ pub fn end_turn(
 		.filter(component::<Player>());
 	let mut amulet = <&Point>::query()
 		.filter(component::<AmuletOfYala>());
-	let current_state = turn_state.clone();
+	let current_state = *turn_state;
 	let mut new_state = match turn_state {
 		TurnState::AwaitingInput => return,
 		TurnState::PlayerTurn => TurnState::MonsterTurn,
@@ -22,7 +22,7 @@ pub fn end_turn(
 
 	let amulet_pos = amulet
 		.iter(ecs)
-		.nth(0)
+		.next()
 		.unwrap();
 
 	player_hp.iter(ecs).for_each(|(hp, pos)| {

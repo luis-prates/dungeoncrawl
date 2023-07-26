@@ -74,7 +74,7 @@ impl State {
 		ctx.print_color_centered(9, GREEN, BLACK,
 			"Press 1 to play again.");
 
-		if let Some(VirtualKeyCode::Key1) = ctx.key {
+		if matches!(ctx.key, Some(VirtualKeyCode::Key1)) {
 			self.reset_game_state();
 		}
 	}
@@ -89,7 +89,7 @@ impl State {
 			"Your town is now saved, and you can return to your normal life.");
 		ctx.print_color_centered(7, GREEN, BLACK, "Press 1 to play again.");
 
-		if let Some(VirtualKeyCode::Key1) = ctx.key {
+		if matches!(ctx.key, Some(VirtualKeyCode::Key1)) {
 			self.reset_game_state();
 		}
 	}
