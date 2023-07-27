@@ -22,7 +22,7 @@ pub fn map_render(
 				let tint = if player_fov.visible_tiles.contains(&pt) {
 					WHITE
 				} else {
-					RED
+					DARK_GRAY
 				};
 				match map.tiles[idx] {
 					TileType::Floor => {
