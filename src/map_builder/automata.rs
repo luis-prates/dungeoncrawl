@@ -21,7 +21,6 @@ impl MapArchitect for CellularAutomataArchitect {
 		mb.player_start = start;
 		mb.amulet_start = mb.find_most_distant();
 
-		display("Final Map", &mb.map, &mb.player_start, &mb.amulet_start, &mb.monster_spawns);
 		mb
 	}
 

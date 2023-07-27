@@ -2,11 +2,13 @@ mod empty;
 mod rooms;
 mod automata;
 mod drunkard;
+mod prefab;
 
 use crate::prelude::*;
 use empty::EmptyArchitect;
 use rooms::RoomsArchitect;
 use automata::CellularAutomataArchitect;
+use prefab::apply_prefab;
 
 use self::drunkard::DrunkardsWalkArchitect;
 const NUM_ROOMS: usize = 20;
@@ -148,6 +150,8 @@ impl MapBuilder {
 			_ => Box::new(CellularAutomataArchitect{})
 		};
 		let mut mb = architect.new(rng);
+		apply_prefab(&mut mb, rng);
+		display("Final Map", &mb.map, &mb.player_start, &mb.amulet_start, &mb.monster_spawns);
 		mb
 	}
 }
@@ -185,8 +189,8 @@ pub fn display(title: &str, map: &Map, player_start: &Point, amulet_start: &Poin
         println!("");
     }
 
-    let mut ignore_me = String::new();
-    stdin()
-        .read_line(&mut ignore_me)
-        .expect("Failed to read line");
+    // let mut ignore_me = String::new();
+    // stdin()
+    //     .read_line(&mut ignore_me)
+    //     .expect("Failed to read line");
 }
