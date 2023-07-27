@@ -22,6 +22,7 @@ mod prelude {
 	pub use legion::*;
 	pub use legion::world::SubWorld;
 	pub use legion::systems::CommandBuffer;
+	pub const NUM_TILES: usize = (SCREEN_WIDTH * SCREEN_HEIGHT) as usize;
 }
 
 use legion::Schedule;

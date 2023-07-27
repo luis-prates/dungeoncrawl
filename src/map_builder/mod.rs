@@ -1,9 +1,11 @@
 mod empty;
 mod rooms;
+mod automata;
 
 use crate::prelude::*;
 use empty::EmptyArchitect;
 use rooms::RoomsArchitect;
+use automata::CellularAutomataArchitect;
 const NUM_ROOMS: usize = 20;
 
 trait MapArchitect {
@@ -107,8 +109,76 @@ impl MapBuilder {
 		}
 	}
 
+	fn spawn_monsters(
+		&self,
+		start: &Point,
+		rng: &mut RandomNumberGenerator,
+	) -> Vec<Point> {
+		const NUM_MONSTERS : usize = 50;
+		let mut spawnable_tiles : Vec<Point> = self.map.tiles
+			.iter()
+			.enumerate()
+			.filter(|(idx, t)|
+				**t == TileType::Floor &&
+					DistanceAlg::Pythagoras.distance2d(
+						*start,
+						self.map.index_to_point2d(*idx)
+					) > 10.0
+			)
+			.map(|(idx, _)| self.map.index_to_point2d(idx))
+			.collect();
+
+		let mut spawns = Vec::new();
+		for _ in 0 .. NUM_MONSTERS {
+			let target_index = rng.random_slice_index(&spawnable_tiles)
+				.unwrap();
+			spawns.push(spawnable_tiles[target_index].clone());
+			spawnable_tiles.remove(target_index);
+		}
+		spawns
+	}
+
 	pub fn new(rng: &mut RandomNumberGenerator) -> Self {
-		let mut architect = RoomsArchitect{};
+		let mut architect = CellularAutomataArchitect{};
 		architect.new(rng)
 	}
+}
+
+pub fn display(title: &str, map: &Map, player_start: &Point, amulet_start: &Point, monster_spawns: &[Point]) {
+    use colored::*;
+    use std::io::stdin;
+    let mut output = vec!['.'; NUM_TILES];
+
+    map.tiles.iter().enumerate().for_each(|(idx, t)| {
+        match *t {
+            TileType::Floor => output[idx] = '.',
+            TileType::Wall => output[idx] = '#'
+        }
+    });
+
+    output[map.point2d_to_index(*player_start)] = '@';
+    output[map.point2d_to_index(*amulet_start)] = 'A';
+    monster_spawns.iter().for_each(|p| {
+        output[map.point2d_to_index(*p)] = 'M';
+    });
+
+    print!("\x1B[2J"); // CLS!
+    println!("----------------------\n{}\n----------------------", title.bright_yellow());
+    for y in 0..SCREEN_HEIGHT {
+        for x in 0..SCREEN_WIDTH {
+            match output[map_idx(x,y)] {
+                '#' => print!("{}", "#".bright_green()),
+                '@' => print!("{}", "@".bright_yellow()),
+                'M' => print!("{}", "M".bright_red()),
+                'A' => print!("{}", "A".bright_magenta()),
+                _ => print!("{}", ".".truecolor(64, 64, 64))
+            }
+        }
+        println!("");
+    }
+
+    let mut ignore_me = String::new();
+    stdin()
+        .read_line(&mut ignore_me)
+        .expect("Failed to read line");
 }
