@@ -6,7 +6,6 @@ mod prefab;
 mod themes;
 
 use crate::prelude::*;
-use empty::EmptyArchitect;
 use rooms::RoomsArchitect;
 use automata::CellularAutomataArchitect;
 use prefab::apply_prefab;
@@ -169,13 +168,13 @@ impl MapBuilder {
 
 pub fn display(title: &str, map: &Map, player_start: &Point, amulet_start: &Point, monster_spawns: &[Point]) {
     use colored::*;
-    use std::io::stdin;
     let mut output = vec!['.'; NUM_TILES];
 
     map.tiles.iter().enumerate().for_each(|(idx, t)| {
         match *t {
             TileType::Floor => output[idx] = '.',
-            TileType::Wall => output[idx] = '#'
+            TileType::Wall => output[idx] = '#',
+			TileType::Exit => output[idx] = 'E',
         }
     });
 
@@ -199,9 +198,4 @@ pub fn display(title: &str, map: &Map, player_start: &Point, amulet_start: &Poin
         }
         println!("");
     }
-
-    // let mut ignore_me = String::new();
-    // stdin()
-    //     .read_line(&mut ignore_me)
-    //     .expect("Failed to read line");
 }
